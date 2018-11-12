@@ -24,7 +24,8 @@ export default class TextField extends PureComponent {
   static defaultProps = {
     underlineColorAndroid: 'transparent',
     disableFullscreenUI: true,
-    autoCapitalize: 'sentences',
+    // autoCapitalize: 'sentences',
+    containerBackgroundColor: '#F8F8FA',
     editable: true,
 
     animationDuration: 225,
@@ -580,6 +581,8 @@ export default class TextField extends PureComponent {
         ? 'email-address'
         : type === 'number' ? 'number-pad' : 'default';
 
+    let autoCapitalize = type === 'email' ? 'none' : 'sentences';
+
     return (
       <View {...containerProps}>
         <Animated.View {...inputContainerProps}>
@@ -600,6 +603,7 @@ export default class TextField extends PureComponent {
               selectionColor={tintColor}
               keyboardType={keyboardType}
               secureTextEntry={secureTextEntry}
+              autoCapitalize={autoCapitalize}
               {...props}
               editable={!disabled && editable}
               onChange={this.onChange}
