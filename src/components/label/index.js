@@ -101,7 +101,7 @@ export default class Label extends PureComponent {
     let top = input.interpolate({
       inputRange: [0, 1],
       outputRange: [
-        (baseSize + basePadding + activeFontSize) / 2, //baseSize + fontSize * 0.25,
+        (baseSize + activeFontSize) / 2 + basePadding, //baseSize + fontSize * 0.25,
         baseSize - basePadding - activeFontSize,
       ],
     });

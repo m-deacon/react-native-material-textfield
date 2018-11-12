@@ -10,6 +10,7 @@ import {
   ViewPropTypes,
   I18nManager,
 } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 
 import RN from 'react-native/package.json';
 
@@ -18,8 +19,6 @@ import Label from '../label';
 import Affix from '../affix';
 import Helper from '../helper';
 import Counter from '../counter';
-
-import styles from './styles.js';
 
 export default class TextField extends PureComponent {
   static defaultProps = {
@@ -280,14 +279,40 @@ export default class TextField extends PureComponent {
     }
   }
 
+  // renderAccessory() {
+  //   let { renderAccessory } = this.props;
+
+  //   if ('function' !== typeof renderAccessory) {
+  //     return null;
+  //   }
+
+  //   return <View style={styles.accessory}>{renderAccessory()}</View>;
+  // }
+
   renderAccessory() {
-    let { renderAccessory } = this.props;
+    // let { renderAccessory } = this.props;
+    // console.log('renderAccessory');
+    let { accessoryRight } = this.props;
+    // console.log(accessoryRight);
 
-    if ('function' !== typeof renderAccessory) {
-      return null;
+    // if ('object' !== typeof accessoryRight) {
+    //   console.log('null');
+    //   return null;
+    // }
+    if (accessoryRight.name) {
+      return (
+        <View style={styles.accessory}>
+          <Ionicons
+            size={24}
+            name={accessoryRight.name}
+            // color={TextField.defaultProps.baseColor}
+            onPress={accessoryRight.onPress}
+            // suppressHighlighting
+          />
+        </View>
+      );
     }
-
-    return <View style={styles.accessory}>{renderAccessory()}</View>;
+    return null;
   }
 
   renderAffix(type, active, focused) {
@@ -565,8 +590,8 @@ export default class TextField extends PureComponent {
               ref={this.updateRef}
             />
 
-            {this.renderAffix('suffix', active, focused)}
             {this.renderAccessory()}
+            {this.renderAffix('suffix', active, focused)}
           </View>
         </Animated.View>
 
@@ -582,3 +607,37 @@ export default class TextField extends PureComponent {
     );
   }
 }
+
+const styles = {
+  inputContainer: {
+    backgroundColor: 'transparent',
+    flexDirection: 'column',
+  },
+
+  input: {
+    // top: 2,
+    padding: 0,
+    margin: 0,
+    flex: 1,
+  },
+
+  row: {
+    flexDirection: 'row',
+    height: '100%',
+    // backgroundColor: 'purple',
+  },
+
+  flex: {
+    flex: 1,
+  },
+
+  accessory: {
+    // top: 0,
+    // right: 8,
+    paddingHorizontal: 4,
+    // position: 'absolute',
+    // backgroundColor: 'orange',
+    // justifyContent: 'center',
+    // alignSelf: 'flex-start',
+  },
+};
