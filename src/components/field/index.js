@@ -121,6 +121,7 @@ export default class TextField extends PureComponent {
       errored: !!error,
 
       height: fontSize * 1.5,
+      secureTextEntry: false,
     };
   }
 
@@ -142,6 +143,10 @@ export default class TextField extends PureComponent {
 
   componentDidMount() {
     this.mounted = true;
+    const { type } = this.props;
+    if (type === 'password') {
+      this.togglePasswordVisibility();
+    }
   }
 
   componentWillUnmount() {
@@ -289,24 +294,22 @@ export default class TextField extends PureComponent {
   //   return <View style={styles.accessory}>{renderAccessory()}</View>;
   // }
 
-  renderAccessory() {
-    // let { renderAccessory } = this.props;
-    // console.log('renderAccessory');
-    let { accessoryRight } = this.props;
-    // console.log(accessoryRight);
+  togglePasswordVisibility() {
+    this.setState(({ secureTextEntry }) => ({
+      secureTextEntry: !secureTextEntry,
+    }));
+  }
 
-    // if ('object' !== typeof accessoryRight) {
-    //   console.log('null');
-    //   return null;
-    // }
-    if (accessoryRight.name) {
+  renderAccessory(type) {
+    if (type === 'password') {
+      const { secureTextEntry } = this.state;
       return (
         <View style={styles.accessory}>
           <Ionicons
             size={24}
-            name={accessoryRight.name}
+            name={secureTextEntry ? 'md-eye' : 'md-eye-off'}
             // color={TextField.defaultProps.baseColor}
-            onPress={accessoryRight.onPress}
+            onPress={() => this.togglePasswordVisibility()}
             // suppressHighlighting
           />
         </View>
@@ -352,6 +355,7 @@ export default class TextField extends PureComponent {
       error,
       errored,
       height,
+      secureTextEntry,
       text = '',
     } = this.state;
     let {
@@ -383,6 +387,8 @@ export default class TextField extends PureComponent {
       containerStyle,
       inputContainerStyle: inputContainerStyleOverrides,
       clearTextOnFocus,
+      containerBackgroundColor,
+      type,
       ...props
     } = this.props;
 
@@ -515,7 +521,16 @@ export default class TextField extends PureComponent {
     };
 
     let containerProps = {
-      style: containerStyle,
+      style: [
+        containerStyle,
+        {
+          margin: 8,
+          backgroundColor: containerBackgroundColor,
+          borderTopRightRadius: 5,
+          borderTopLeftRadius: 5,
+          overflow: 'hidden',
+        },
+      ],
       onStartShouldSetResponder: () => true,
       onResponderRelease: this.onPress,
       pointerEvents: !disabled && editable ? 'auto' : 'none',
@@ -560,6 +575,11 @@ export default class TextField extends PureComponent {
       style: titleTextStyle,
     };
 
+    let keyboardType =
+      type === 'email'
+        ? 'email-address'
+        : type === 'number' ? 'number-pad' : 'default';
+
     return (
       <View {...containerProps}>
         <Animated.View {...inputContainerProps}>
@@ -578,6 +598,8 @@ export default class TextField extends PureComponent {
                 focused && props.placeholder ? placeholderStyle : null,
               ]}
               selectionColor={tintColor}
+              keyboardType={keyboardType}
+              secureTextEntry={secureTextEntry}
               {...props}
               editable={!disabled && editable}
               onChange={this.onChange}
@@ -590,7 +612,7 @@ export default class TextField extends PureComponent {
               ref={this.updateRef}
             />
 
-            {this.renderAccessory()}
+            {this.renderAccessory(type)}
             {this.renderAffix('suffix', active, focused)}
           </View>
         </Animated.View>
