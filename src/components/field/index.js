@@ -31,7 +31,7 @@ export default class TextField extends PureComponent {
     animationDuration: 225,
 
     fontSize: 16,
-    titleFontSize: 12,
+    helperFontSize: 12,
     labelFontSize: 12,
     labelHeight: 24,
     labelPadding: 4,
@@ -57,14 +57,14 @@ export default class TextField extends PureComponent {
     animationDuration: PropTypes.number,
 
     fontSize: PropTypes.number,
-    titleFontSize: PropTypes.number,
+    helperFontSize: PropTypes.number,
     labelFontSize: PropTypes.number,
     labelHeight: PropTypes.number,
     labelPadding: PropTypes.number,
     inputContainerPadding: PropTypes.number,
 
     labelTextStyle: Text.propTypes.style,
-    titleTextStyle: Text.propTypes.style,
+    helperTextStyle: Text.propTypes.style,
     affixTextStyle: Text.propTypes.style,
 
     tintColor: PropTypes.string,
@@ -72,7 +72,7 @@ export default class TextField extends PureComponent {
     baseColor: PropTypes.string,
 
     label: PropTypes.string.isRequired,
-    title: PropTypes.string,
+    helper: PropTypes.string,
 
     characterRestriction: PropTypes.number,
 
@@ -362,23 +362,23 @@ export default class TextField extends PureComponent {
     let {
       style: inputStyleOverrides,
       label,
-      title,
+      helper,
       value,
       defaultValue,
-      characterRestriction: limit,
+      characterRestriction: max,
       editable,
       disabled,
       disabledLineType,
       disabledLineWidth,
       animationDuration,
       fontSize,
-      titleFontSize,
+      helperFontSize,
       labelFontSize,
       labelHeight,
       labelPadding,
       inputContainerPadding,
       labelTextStyle,
-      titleTextStyle,
+      helperTextStyle,
       tintColor,
       baseColor,
       textColor,
@@ -390,6 +390,7 @@ export default class TextField extends PureComponent {
       clearTextOnFocus,
       containerBackgroundColor,
       type,
+      min,
       ...props
     } = this.props;
 
@@ -408,7 +409,7 @@ export default class TextField extends PureComponent {
 
     let active = !!value; // || props.placeholder);
     let count = value.length;
-    let restricted = limit < count;
+    let restricted = max + 5 < count;
 
     let textAlign = I18nManager.isRTL ? 'right' : 'left';
 
@@ -473,15 +474,15 @@ export default class TextField extends PureComponent {
         outputRange: [1, 0, 0],
       }),
 
-      fontSize: title
-        ? titleFontSize
+      fontSize: helper
+        ? helperFontSize
         : focus.interpolate({
             inputRange: [-1, 0, 1],
-            outputRange: [titleFontSize, 0, 0],
+            outputRange: [helperFontSize, 0, 0],
           }),
     };
 
-    let titleStyle = {
+    let helperStyle = {
       color: baseColor,
 
       opacity: focus.interpolate({
@@ -489,7 +490,7 @@ export default class TextField extends PureComponent {
         outputRange: [0, 1, 1],
       }),
 
-      fontSize: titleFontSize,
+      fontSize: helperFontSize,
     };
 
     let placeholderStyle = {
@@ -503,7 +504,7 @@ export default class TextField extends PureComponent {
       //   inputRange: [-1, 0, 1],
       //   outputRange: [1, 0, 0],
       // }),
-      // fontSize: title
+      // fontSize: helper
       //   ? fontSize
       //   : focus.interpolate({
       //       inputRange: [-1, 0, 1],
@@ -513,11 +514,11 @@ export default class TextField extends PureComponent {
 
     let helperContainerStyle = {
       flexDirection: 'row',
-      height: title || limit || error ? titleFontSize * 2 : 0,
+      height: helper || min || max || error ? helperFontSize * 2 : 0,
       paddingHorizontal: inputContainerPadding,
       // focus.interpolate({
       //     inputRange: [-1, 0, 1],
-      //     outputRange: [titleFontSize * 2, 0, 8],
+      //     outputRange: [helperFontSize * 2, 0, 8],
       //   }),
     };
 
@@ -571,9 +572,10 @@ export default class TextField extends PureComponent {
       baseColor,
       errorColor,
       count,
-      limit,
-      fontSize: titleFontSize,
-      style: titleTextStyle,
+      min,
+      max,
+      fontSize: helperFontSize,
+      style: helperTextStyle,
     };
 
     let keyboardType =
@@ -623,8 +625,8 @@ export default class TextField extends PureComponent {
 
         <Animated.View style={helperContainerStyle}>
           <View style={styles.flex}>
-            <Helper style={[errorStyle, titleTextStyle]}>{error}</Helper>
-            <Helper style={[titleStyle, titleTextStyle]}>{title}</Helper>
+            <Helper style={[errorStyle, helperTextStyle]}>{error}</Helper>
+            <Helper style={[helperStyle, helperTextStyle]}>{helper}</Helper>
           </View>
 
           <Counter {...counterProps} />

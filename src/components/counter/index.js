@@ -7,7 +7,9 @@ import styles from './styles';
 export default class Counter extends PureComponent {
   static propTypes = {
     count: PropTypes.number.isRequired,
-    limit: PropTypes.number,
+    min: PropTypes.number,
+    max: PropTypes.number,
+    error: PropTypes.string,
 
     fontSize: PropTypes.number,
 
@@ -18,21 +20,30 @@ export default class Counter extends PureComponent {
   };
 
   render() {
-    let { count, limit, baseColor, errorColor, fontSize, style } = this.props;
+    let {
+      count,
+      min,
+      max,
+      error,
+      baseColor,
+      errorColor,
+      fontSize,
+      style,
+    } = this.props;
 
     let textStyle = {
-      color: count > limit? errorColor : baseColor,
+      color: (count > max || count < min) && error ? errorColor : baseColor,
       fontSize,
     };
 
-    if (!limit) {
+    if (!(min || max)) {
       return null;
     }
 
     return (
       <View style={styles.container}>
         <Text style={[styles.text, style, textStyle]}>
-          {count} / {limit}
+          {count} / {max ? max : min}
         </Text>
       </View>
     );
