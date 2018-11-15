@@ -528,8 +528,8 @@ export default class TextField extends PureComponent {
         {
           margin: 8,
           backgroundColor: containerBackgroundColor,
-          borderTopRightRadius: 5,
-          borderTopLeftRadius: 5,
+          borderTopRightRadius: 8,
+          borderTopLeftRadius: 8,
           overflow: 'hidden',
         },
       ],
