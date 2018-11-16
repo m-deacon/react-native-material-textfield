@@ -88,6 +88,9 @@ export default class TextField extends PureComponent {
 
     renderAccessory: PropTypes.func,
 
+    format: PropTypes.func,
+    parse: PropTypes.func,
+
     prefix: PropTypes.string,
     suffix: PropTypes.string,
 
@@ -254,7 +257,16 @@ export default class TextField extends PureComponent {
   }
 
   onChangeText(text) {
-    let { onChangeText } = this.props;
+    let { onChangeText, type, parse } = this.props;
+
+    if (parse) {
+      text = parse(text);
+    } else {
+      // switch (type) {
+      //   case 'email':
+      //     text = text.substring('+27 '.length);
+      // }
+    }
 
     this.setState({ text });
 
@@ -391,6 +403,7 @@ export default class TextField extends PureComponent {
       containerBackgroundColor,
       type,
       min,
+      format,
       ...props
     } = this.props;
 
@@ -405,7 +418,15 @@ export default class TextField extends PureComponent {
       null == defaultValue
     );
 
-    value = defaultVisible ? defaultValue : text;
+    if (format) {
+      text = format(text);
+    } else {
+      // switch (type) {
+      //   case 'email':
+      //     text = text => '+27 ' + text;
+      // }
+    }
+    value = defaultVisible ? defaultValue : format ? format(text) : text;
 
     let active = !!value; // || props.placeholder);
     let count = value.length;
@@ -581,9 +602,12 @@ export default class TextField extends PureComponent {
     let keyboardType =
       type === 'email'
         ? 'email-address'
-        : type === 'number' ? 'number-pad' : 'default';
+        : type === 'number'
+          ? 'number-pad'
+          : type === 'currency' ? 'decimal-pad' : 'default';
 
-    let autoCapitalize = type === 'email' ? 'none' : 'sentences';
+    let autoCapitalize =
+      type === 'email' || type === 'password' ? 'none' : 'sentences';
 
     return (
       <View {...containerProps}>
