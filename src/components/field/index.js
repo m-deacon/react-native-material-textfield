@@ -404,6 +404,7 @@ export default class TextField extends PureComponent {
       type,
       min,
       format,
+      noMargin,
       ...props
     } = this.props;
 
@@ -421,10 +422,10 @@ export default class TextField extends PureComponent {
     if (format) {
       text = format(text);
     } else {
-      // switch (type) {
-      //   case 'email':
-      //     text = text => '+27 ' + text;
-      // }
+      switch (type) {
+        case 'amount':
+          text = text => text.toString();
+      }
     }
     value = defaultVisible ? defaultValue : format ? format(text) : text;
 
@@ -547,7 +548,7 @@ export default class TextField extends PureComponent {
       style: [
         containerStyle,
         {
-          margin: 8,
+          margin: noMargin ? 0 : 8,
           backgroundColor: containerBackgroundColor,
           borderTopRightRadius: 8,
           borderTopLeftRadius: 8,
