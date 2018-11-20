@@ -430,7 +430,7 @@ export default class TextField extends PureComponent {
     value = defaultVisible ? defaultValue : format ? format(text) : text;
 
     let active = !!value; // || props.placeholder);
-    let count = value.length;
+    let count = value ? value.length : 0;
     let restricted = max + 5 < count;
 
     let textAlign = I18nManager.isRTL ? 'right' : 'left';
@@ -550,8 +550,8 @@ export default class TextField extends PureComponent {
         {
           margin: noMargin ? 0 : 8,
           backgroundColor: containerBackgroundColor,
-          borderTopRightRadius: 8,
-          borderTopLeftRadius: 8,
+          borderTopRightRadius: 4,
+          borderTopLeftRadius: 4,
           overflow: 'hidden',
         },
       ],
