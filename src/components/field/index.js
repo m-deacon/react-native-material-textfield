@@ -610,6 +610,8 @@ export default class TextField extends PureComponent {
     let autoCapitalize =
       type === 'email' || type === 'password' ? 'none' : 'sentences';
 
+    let autoCorrect = type === 'email' || type === 'password' ? false : true;
+
     return (
       <View {...containerProps}>
         <Animated.View {...inputContainerProps}>
@@ -631,6 +633,7 @@ export default class TextField extends PureComponent {
               keyboardType={keyboardType}
               secureTextEntry={secureTextEntry}
               autoCapitalize={autoCapitalize}
+              autoCorrect={autoCorrect}
               {...props}
               editable={!disabled && editable}
               onChange={this.onChange}
