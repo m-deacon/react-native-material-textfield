@@ -603,8 +603,8 @@ export default class TextField extends PureComponent {
     let keyboardType =
       type === 'email'
         ? 'email-address'
-        : type === 'number'
-          ? 'number-pad'
+        : type === 'number' || type === 'mobile'
+          ? 'phone-pad'
           : type === 'currency' ? 'decimal-pad' : 'default';
 
     let autoCapitalize =
