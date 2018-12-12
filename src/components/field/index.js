@@ -605,7 +605,9 @@ export default class TextField extends PureComponent {
         ? 'email-address'
         : type === 'number' || type === 'mobile'
           ? 'phone-pad'
-          : type === 'currency' ? 'decimal-pad' : 'default';
+          : type === 'currency'
+            ? Platform.OS === 'ios' ? 'decimal-pad' : 'phone-pad'
+            : 'default';
 
     let autoCapitalize =
       type === 'email' || type === 'password' ? 'none' : 'sentences';
