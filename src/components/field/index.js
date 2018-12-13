@@ -25,7 +25,7 @@ export default class TextField extends PureComponent {
     underlineColorAndroid: 'transparent',
     disableFullscreenUI: true,
     // autoCapitalize: 'sentences',
-    containerBackgroundColor: '#F8F8FA',
+    containerBackgroundColor: '#FFFFFF',
     editable: true,
 
     animationDuration: 225,
